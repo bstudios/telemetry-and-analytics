@@ -1,1 +1,0 @@
-INSERT INTO `users` (`id`, `text_modifiers`, `int_modifiers`) VALUES ('1', '2019-01-01 00:00:00', 0);

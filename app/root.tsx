@@ -39,16 +39,16 @@ export function ErrorBoundary() {
   return (
     <html>
       <head>
-        <title>Oh no!</title>
+        <title>Error</title>
         <Meta />
         <Links />
       </head>
       <body>
         <div>
-            <h1>Oh no!</h1>
-            <p>Something went wrong.</p>
-            <pre>{error.message}</pre>
-          </div>
+          <h1>Error</h1>
+          <p>Something went wrong.</p>
+          <pre>{error.message}</pre>
+        </div>
         <Scripts />
       </body>
     </html>

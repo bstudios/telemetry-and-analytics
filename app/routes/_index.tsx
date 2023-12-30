@@ -1,69 +1,27 @@
-import {
-  ActionFunctionArgs,
-  json,
-  type LoaderFunctionArgs,
-  type MetaFunction,
-} from "@remix-run/cloudflare";
-import { db } from "./../d1client.server";
-import { Env } from "./../types";
-import { users } from "./../db/schema/users";
-import { Form, useLoaderData } from "@remix-run/react";
+import { type MetaFunction } from "@remix-run/cloudflare";
+import { Link } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
-};
-
-export const loader = async ({ context }: LoaderFunctionArgs) => {
-  const allUsers = await db((context.env as Env).DB)
-    .select()
-    .from(users)
-    .all();
-
-  if (!allUsers) {
-    throw new Response("Not Found", {
-      status: 404,
-    });
-  }
-
-  return json({ users: allUsers });
+  return [{ title: "Bithell Studios Telemetry and Analytics Platform" }];
 };
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>();
-
-  const { users } = data;
-
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      {users.length > 0 ? (
-        <div>
-          {users.map((user) => (
-            <div key={user.id}>
-              <a href={`/${user.id}`}>{user.textModifiers}</a>
-              <p>{user.intModifiers}</p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div>
-          <h1>No results</h1>
-        </div>
-      )}
-      <Form method="post">
-        <button type="submit">New</button>
-      </Form>
+      <h1>Welcome to Bithell Studios Telemetry and Analytics Platform</h1>
+      <Link to="/projects/adam-rms">AdamRMS</Link>
+      <p>
+        Text about how this works, and the privacy etc etc goes here.
+        Principles:
+      </p>
+      <ul>
+        <li>
+          Data not verified, presented as-is - anyone can make a request and
+          it'll show up here and skew the stats
+        </li>
+        <li>Don't store any personal data</li>
+        <li>Project is open source</li>
+      </ul>
     </div>
   );
 }
-
-export const action = async ({ context }: ActionFunctionArgs) => {
-  const user = await db((context.env as Env).DB)
-    .insert(users)
-    .values({ id: "something something" })
-    .returning({ insertedId: users.id });
-  return json({ user });
-};

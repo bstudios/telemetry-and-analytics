@@ -1,34 +1,68 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "7945f741-41b5-43c7-bc9f-5f76414fc614",
+  "id": "b1f619dc-ca29-470f-b221-57571ca3e2ed",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "users": {
-      "name": "users",
+    "adamrmsinstallations": {
+      "name": "adamrmsinstallations",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
         },
-        "text_modifiers": {
-          "name": "text_modifiers",
-          "type": "text",
+        "timestamp": {
+          "name": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
           "default": "CURRENT_TIMESTAMP"
         },
-        "int_modifiers": {
-          "name": "int_modifiers",
+        "rooturl": {
+          "name": "rooturl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "devmode": {
+          "name": "devmode",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
           "default": false
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": {
+            "instances": false,
+            "users": false,
+            "assets": false
+          }
         }
       },
       "indexes": {},
