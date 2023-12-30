@@ -1,0 +1,11 @@
+send_metrics = true
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "speed-tests"
+database_id = "6b2e954b-b9be-47c9-94ba-51b4e6c56ffc"
+preview_database_id = "DB"
+migrations_dir = "app/db/migrations"
+
+
+# This file is committed to git - do not put secrets here!
