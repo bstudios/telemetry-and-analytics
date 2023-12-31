@@ -3,7 +3,7 @@ send_metrics = true
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "bithellstudios-telemetry-analytics"
-database_id = ""
+database_id = "1bddda40-e899-4ab5-a901-e4c92404a361"
 preview_database_id = "DB"
 migrations_dir = "app/db/migrations"
 
