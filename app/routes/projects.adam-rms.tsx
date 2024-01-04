@@ -44,9 +44,6 @@ export default function Index() {
         <div>
           {activeInstallations.map((activeInstallation) => (
             <div key={activeInstallation.id}>
-              <a href={`/${activeInstallation.id}`}>
-                {activeInstallation.rootUrl}
-              </a>
               <pre>{JSON.stringify(activeInstallation, null, 2)}</pre>
             </div>
           ))}
