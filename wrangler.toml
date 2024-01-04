@@ -5,6 +5,6 @@ binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "bithellstudios-telemetry-analytics"
 database_id = "1bddda40-e899-4ab5-a901-e4c92404a361"
 preview_database_id = "DB"
-migrations_dir = "app/db/migrations"
+migrations_dir = "migrations"
 
 # This file is committed to git - do not put secrets here!
