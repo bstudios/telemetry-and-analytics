@@ -10,6 +10,7 @@ export const AdamRMSInstallations = sqliteTable("adamrmsinstallations", {
   version: text("version").notNull(),
   devMode: integer("devmode", { mode: "boolean" }).notNull().default(false),
   hidden: integer("hidden", { mode: "boolean" }).notNull().default(false),
+  userDefinedString: text("userdefinedstring").notNull().default(""),
   metaData: text("metadata", { mode: "json" })
     .$type<{
       instances: number | false;
