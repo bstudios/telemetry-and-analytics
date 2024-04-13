@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
-  const { env, cf, ctx } = context.cloudflare;
+  const { env } = context.cloudflare;
   const activeInstallations = await db(env.DB)
     .select()
     .from(AdamRMSInstallations)

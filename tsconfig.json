@@ -1,6 +1,7 @@
 {
   "include": [
     "**/*.ts",
+    "**/*.d.ts",
     "**/*.tsx",
     "**/.server/**/*.ts",
     "**/.server/**/*.tsx",
