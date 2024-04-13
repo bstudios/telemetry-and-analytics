@@ -1,4 +1,3 @@
-import type { LinksFunction } from "@remix-run/cloudflare";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/charts/styles.css";
@@ -11,10 +10,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from "@remix-run/react";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 
-export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -26,6 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ColorSchemeScript />
       </head>
       <body>
+        <MantineProvider>{children}</MantineProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -33,11 +33,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+export default function App() {
+  return <Outlet />;
+}
+
 export function ErrorBoundary() {
   const error = useRouteError() as Error;
   console.error(error);
   return (
-    <html>
+    <html lang="en">
       <head>
         <title>Error</title>
         <Meta />
@@ -52,6 +56,5 @@ export function ErrorBoundary() {
         <Scripts />
       </body>
     </html>
-export default function App() {
-  return <Outlet />;
+  );
 }
