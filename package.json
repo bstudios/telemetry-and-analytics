@@ -16,11 +16,8 @@
     "migrations:gen": "drizzle-kit generate:sqlite",
     "migrations:upgradeMetadata": "drizzle-kit up:sqlite",
     "migrations:check": "drizzle-kit check:sqlite",
-    "local:migrations:apply": "wrangler d1 migrations apply bithellstudios-telemetry-analytics --local",
-    "local:d1:init": "npm run local:migrations:apply && wrangler d1 execute bithellstudios-telemetry-analytics --file='./app/db/fixtures/demo.sql' --local",
-    "migrations:apply": "wrangler d1 migrations apply bithellstudios-telemetry-analytics",
-    "d1:new": "wrangler d1 create bithellstudios-telemetry-analytics",
-    "d1:init": "npm run migrations:apply && wrangler d1 execute bithellstudios-telemetry-analytics --file='./app/db/fixtures/demo.sql'",
+    "local:migrations:apply": "wrangler d1 migrations apply DB --local",
+    "local:d1:init": "npm run local:migrations:apply && wrangler d1 execute DB --file='./app/db/fixtures/demo.sql' --local",
     "typegen": "wrangler types"
   },
   "dependencies": {

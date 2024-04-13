@@ -5,7 +5,6 @@ import {
   type MetaFunction,
 } from "@remix-run/cloudflare";
 import { db } from "../d1client.server";
-import { Env } from "../types";
 import { AdamRMSInstallations } from "../db/schema/AdamRMSInstallations";
 import { Form, useLoaderData } from "@remix-run/react";
 import { and, desc, eq, gt } from "drizzle-orm";
@@ -15,7 +14,8 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
-  const activeInstallations = await db((context.env as Env).DB)
+  const { env, cf, ctx } = context.cloudflare;
+  const activeInstallations = await db(env.DB)
     .select()
     .from(AdamRMSInstallations)
     .groupBy(AdamRMSInstallations.rootUrl)
