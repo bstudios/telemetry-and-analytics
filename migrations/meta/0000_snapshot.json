@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "b1f619dc-ca29-470f-b221-57571ca3e2ed",
+  "id": "b1486a55-a169-404a-8ab0-ae389a97f737",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "adamrmsinstallations": {
@@ -14,8 +14,23 @@
           "notNull": true,
           "autoincrement": true
         },
-        "timestamp": {
-          "name": "timestamp",
+        "uuid": {
+          "name": "uuid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "firstheardtimestamp": {
+          "name": "firstheardtimestamp",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "latestheardtimestamp": {
+          "name": "latestheardtimestamp",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -29,11 +44,18 @@
           "notNull": true,
           "autoincrement": false
         },
-        "version": {
-          "name": "version",
+        "location": {
+          "name": "location",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "asn": {
+          "name": "asn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "devmode": {
@@ -51,6 +73,71 @@
           "notNull": true,
           "autoincrement": false,
           "default": false
+        },
+        "userdefinedstring": {
+          "name": "userdefinedstring",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": {
+            "instances": false,
+            "users": false,
+            "assets": false
+          }
+        }
+      },
+      "indexes": {
+        "adamrmsinstallations_uuid_unique": {
+          "name": "adamrmsinstallations_uuid_unique",
+          "columns": [
+            "uuid"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "adamrmstimeseries": {
+      "name": "adamrmstimeseries",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "installationId": {
+          "name": "installationId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         },
         "metadata": {
           "name": "metadata",

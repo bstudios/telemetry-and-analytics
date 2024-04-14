@@ -9,6 +9,8 @@ import { AdamRMSInstallations } from "../db/schema/AdamRMSInstallations";
 import { withZod } from "@remix-validated-form/with-zod";
 import { z as zod } from "zod";
 import { GenericObject, validationError } from "remix-validated-form";
+import { and, eq, isNotNull } from "drizzle-orm";
+import { AdamRMSTimeSeries } from "~/db/schema/AdamRMSTimeSeries";
 
 export const loader = async () =>
   redirect("/why-is-my-server-calling-this-url");
@@ -28,7 +30,7 @@ const validator = withZod(
 );
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  const { env } = context.cloudflare;
+  const { env, cf } = context.cloudflare;
   if (request.method !== "PUT") {
     return json({ message: "Method not allowed" }, 405);
   }
@@ -40,22 +42,92 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
   }
   const validated = await validator.validate(payload as GenericObject);
   if (validated.error) return validationError(validated.error);
-  const insert = await db(env.DB)
-    .insert(AdamRMSInstallations)
+
+  const findInstallation = await db(env.DB)
+    .select({ id: AdamRMSInstallations.id })
+    .from(AdamRMSInstallations)
+    .where(
+      and(
+        isNotNull(AdamRMSInstallations.rootUrl),
+        eq(AdamRMSInstallations.rootUrl, validated.data.rootUrl)
+      )
+    )
+    .limit(1);
+  let installationId: number;
+  if (findInstallation.length > 0) {
+    installationId = findInstallation[0].id;
+    const update = await db(env.DB)
+      .update(AdamRMSInstallations)
+      .set({
+        latestHeardTimestamp: new Date(),
+        version: validated.data.version,
+        devMode: validated.data.devMode,
+        asn: cf.asOrganization + " (" + cf.asn + ")",
+        location:
+          cf.city +
+          ", " +
+          cf.region +
+          ", " +
+          cf.country +
+          ", " +
+          cf.continent +
+          " (via " +
+          cf.colo +
+          ")",
+        userDefinedString: validated.data.userDefinedString || "",
+        metaData: {
+          instances: validated.data.metaData.instances || false,
+          users: validated.data.metaData.users || false,
+          assets: validated.data.metaData.assets || false,
+        },
+      })
+      .where(eq(AdamRMSInstallations.id, installationId));
+    if (update.error) return json({ message: update.error }, 500);
+  } else {
+    const insert = await db(env.DB)
+      .insert(AdamRMSInstallations)
+      .values({
+        firstHeardTimestamp: new Date(),
+        latestHeardTimestamp: new Date(),
+        rootUrl: validated.data.rootUrl,
+        version: validated.data.version,
+        devMode: validated.data.devMode,
+        asn: cf.asOrganization + " (" + cf.asn + ")",
+        location:
+          cf.city +
+          ", " +
+          cf.region +
+          ", " +
+          cf.country +
+          ", " +
+          cf.continent +
+          " (via " +
+          cf.colo +
+          ")",
+        userDefinedString: validated.data.userDefinedString || "",
+        metaData: {
+          instances: validated.data.metaData.instances || false,
+          users: validated.data.metaData.users || false,
+          assets: validated.data.metaData.assets || false,
+        },
+      })
+      .returning({ insertedId: AdamRMSInstallations.id });
+    if (insert.error) return json({ message: insert.error }, 500);
+    installationId = insert[0].insertedId;
+  }
+
+  const insertTimeSeries = await db(env.DB)
+    .insert(AdamRMSTimeSeries)
     .values({
-      rootUrl: validated.data.rootUrl,
+      installationId: installationId,
       version: validated.data.version,
-      devMode: validated.data.devMode,
-      userDefinedString: validated.data.userDefinedString || "",
       metaData: {
         instances: validated.data.metaData.instances || false,
         users: validated.data.metaData.users || false,
         assets: validated.data.metaData.assets || false,
       },
     });
-  if (insert.error) {
-    return json({ message: insert.error }, 500);
-  } else {
-    return json({}, 200);
-  }
+  if (insertTimeSeries.error)
+    return json({ message: insertTimeSeries.error }, 500);
+  return json({}, 200);
 };

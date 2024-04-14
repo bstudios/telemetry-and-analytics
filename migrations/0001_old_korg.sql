@@ -1,1 +1,0 @@
-ALTER TABLE adamrmsinstallations ADD `userdefinedstring` text DEFAULT '' NOT NULL;
