@@ -28,7 +28,6 @@ export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to Bithell Studios Telemetry and Analytics Platform</h1>
-      <Link to="/projects/adam-rms">AdamRMS</Link>
       <p>
         Hello visitor from {data.visitorString}! This is a platform for
         telemetry and analytics for Bithell Studios projects.
