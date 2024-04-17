@@ -5,6 +5,13 @@ compatibility_date = "2023-12-31"
 send_metrics = true 
 
 
+[[d1_databases]]
+database_id = "572b82f0-c3c2-4f55-aa10-39d902a3959f"
+binding = "DB"
+database_name = "bithellstudios-telemetry-analytics-preview"
+migrations_table = "migrations" # Customize this value to change your applied migrations table name
+migrations_dir = "migrations"
+
 # Applies to both the local and the preview environments (but not the production environment) - ie PR previews etc. Normally when developing locally though you are using a local db
 [[env.preview.d1_databases]]
 database_id = "572b82f0-c3c2-4f55-aa10-39d902a3959f"
