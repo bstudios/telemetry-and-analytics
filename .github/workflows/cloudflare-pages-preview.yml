@@ -38,5 +38,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '👋 Thanks for reporting! ${{ steps.deploy.outputs.deployment-url }} https://github.com/bstudios/telemetry-and-analytics/actions/workflows/reset-preview-d1.yml'
+              body: 'Built preview on Cloudflare Pages: ${{ steps.deploy.outputs.deployment-url }} [Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). [Run Migrations](https://github.com/bstudios/telemetry-and-analytics/actions/workflows/migrate-preview-d1.yml) or [Reset Preview DB](https://github.com/bstudios/telemetry-and-analytics/actions/workflows/reset-preview-d1.yml)'
             })
