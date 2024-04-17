@@ -2,6 +2,8 @@ on:
   push:
     branches-ignore:
       - main
+
+name: Push Preview to Cloudflare Pages
 jobs:
   deploy:
     runs-on: ubuntu-latest
