@@ -3,6 +3,10 @@ on:
     branches:
       - main
 
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 name: Deploy production to Cloudflare Pages & Migrate DB
 jobs:
   deploy:
