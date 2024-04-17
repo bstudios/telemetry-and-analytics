@@ -1,0 +1,24 @@
+on:
+  workflow_dispatch:
+name: Reset the preview database to base state
+run-name: Reset the preview database triggered by @${{ github.actor }}
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    name: Reset database
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: npm
+          command: wrangler d1 execute bithellstudios-telemetry-analytics-preview --remote=true --command="PRAGMA defer_foreign_keys = true; DROP TABLE IF EXISTS adamrmsinstallations; PRAGMA defer_foreign_keys = false;"
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: npm
+          command: wrangler d1 migrations apply bithellstudios-telemetry-analytics-preview --remote=true"

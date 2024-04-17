@@ -1,0 +1,23 @@
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch Name to run migrations of"
+        required: true
+        type: string
+name: Run migrations on preview database from a given branch
+run-name: Ran migrations in ${{ inputs.BRANCH }} branch
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    name: Run migrations
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.BRANCH }}
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: npm
+          command: wrangler d1 migrations apply bithellstudios-telemetry-analytics-preview --remote=true
