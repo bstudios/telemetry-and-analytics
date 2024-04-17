@@ -6,10 +6,11 @@ send_metrics = true
 
 
 [[d1_databases]]
-database_id = "572b82f0-c3c2-4f55-aa10-39d902a3959f"
 binding = "DB"
-database_name = "bithellstudios-telemetry-analytics-preview"
-migrations_table = "migrations" # Customize this value to change your applied migrations table name
+database_id = "67e79b07-81ca-4e5c-ab60-323e45555e11"
+preview_database_id = "572b82f0-c3c2-4f55-aa10-39d902a3959f"
+database_name = "bithellstudios-telemetry-analytics-prod"
+migrations_table = "migrations"
 migrations_dir = "migrations"
 
 # Applies to both the local and the preview environments (but not the production environment) - ie PR previews etc. Normally when developing locally though you are using a local db
