@@ -15,10 +15,10 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageManager: npm
-          command: wrangler d1 execute bithellstudios-telemetry-analytics-preview --remote=true --command="PRAGMA defer_foreign_keys = true; DROP TABLE IF EXISTS adamrmsinstallations; PRAGMA defer_foreign_keys = false;"
+          command: wrangler d1 execute DB --preview --remote=true --command="PRAGMA defer_foreign_keys = true; DROP TABLE IF EXISTS adamrmsinstallations; PRAGMA defer_foreign_keys = false;"
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageManager: npm
-          command: d1 migrations apply bithellstudios-telemetry-analytics-preview --remote=true"
+          command: d1 migrations apply DB --preview --remote=true"

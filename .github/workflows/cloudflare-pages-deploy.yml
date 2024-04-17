@@ -23,5 +23,5 @@ jobs:
           command: pages deploy ./build/client --project-name=bithellstudios-telemetry-and-analytics --commit-dirty=true
           postCommands: |
             echo "*** Running D1 Migrations ***"
-            wrangler d1 migrations apply bithellstudios-telemetry-analytics-prod --remote
+            wrangler d1 migrations apply DB --remote
             echo "******"

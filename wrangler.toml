@@ -4,7 +4,7 @@ pages_build_output_dir = "public"
 compatibility_date = "2023-12-31"
 send_metrics = true 
 
-
+# This is used by wrangler to figure out which is preview and which isn't
 [[d1_databases]]
 binding = "DB"
 database_id = "67e79b07-81ca-4e5c-ab60-323e45555e11"
