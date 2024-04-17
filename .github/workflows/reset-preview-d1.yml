@@ -21,4 +21,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageManager: npm
-          command: wrangler d1 migrations apply bithellstudios-telemetry-analytics-preview --remote=true"
+          command: d1 migrations apply bithellstudios-telemetry-analytics-preview --remote=true"
