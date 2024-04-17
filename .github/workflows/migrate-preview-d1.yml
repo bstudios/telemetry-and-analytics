@@ -5,6 +5,12 @@ on:
         description: "Branch Name to run migrations of"
         required: true
         type: string
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 name: Run migrations on preview database from a given branch
 run-name: Ran migrations in ${{ inputs.BRANCH }} branch
 jobs:
