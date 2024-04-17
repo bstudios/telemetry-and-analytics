@@ -10,14 +10,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - uses: cloudflare/wrangler-action@v3
+      - name: Drop tables
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           wranglerVersion: "3.51.0"
           packageManager: npm
-          command: d1 execute DB --preview --remote=true --command="PRAGMA defer_foreign_keys = true; DROP TABLE IF EXISTS adamrmsinstallations; PRAGMA defer_foreign_keys = false;"
-      - uses: cloudflare/wrangler-action@v3
+          command: d1 execute DB --preview --remote=true --command="PRAGMA defer_foreign_keys = true; DROP TABLE IF EXISTS migrations adamrmsinstallations; PRAGMA defer_foreign_keys = false;"
+      - name: Run migrations from main branch
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
