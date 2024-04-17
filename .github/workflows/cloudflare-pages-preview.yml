@@ -21,7 +21,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageManager: npm
-          command: pages deploy ./build/client --project-name=bithellstudios-telemetry-and-analytics
+          command: pages deploy ./build/client --project-name=bithellstudios-telemetry-and-analytics --commit-dirty=true
       - name: print deployment-url
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}

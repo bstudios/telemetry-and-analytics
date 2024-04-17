@@ -19,8 +19,8 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageManager: npm
-          command: pages deploy ./build/client --project-name=bithellstudios-telemetry-and-analytics
+          command: pages deploy ./build/client --project-name=bithellstudios-telemetry-and-analytics --commit-dirty=true
           postCommands: |
             echo "*** Running D1 Migrations ***"
-            wrangler d1 migrations apply bithellstudios-telemetry-analytics-prod --remote=true
+            wrangler d1 migrations apply bithellstudios-telemetry-analytics-prod
             echo "******"
