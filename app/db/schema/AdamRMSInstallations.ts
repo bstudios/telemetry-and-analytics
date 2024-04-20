@@ -25,9 +25,17 @@ export const AdamRMSInstallations = sqliteTable("adamrmsinstallations", {
     .$type<{
       instances: number | false;
       users: number | false;
-      assets: number | false;
+      assetsCount: number | false;
+      assetsValueUSD: number | false;
+      assetsMassKg: number | false;
     }>()
-    .default({ instances: false, users: false, assets: false }),
+    .default({
+      instances: false,
+      users: false,
+      assetsCount: false,
+      assetsValueUSD: false,
+      assetsMassKg: false,
+    }),
 });
 
 export const AdamRMSInstallationsRelations = relations(

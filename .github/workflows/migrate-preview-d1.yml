@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 
 name: Run migrations on preview database from a given branch
-run-name: Ran migrations in ${{ inputs.BRANCH }} branch
+run-name: ${{ github.actor }} ran migrations from the ${{ inputs.BRANCH }} branch on the preview database
 jobs:
   migrate:
     runs-on: ubuntu-latest

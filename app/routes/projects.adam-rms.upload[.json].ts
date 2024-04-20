@@ -7,9 +7,9 @@ import {
 import { db } from "../d1client.server";
 import { AdamRMSInstallations } from "../db/schema/AdamRMSInstallations";
 import { withZod } from "@remix-validated-form/with-zod";
-import { z as zod } from "zod";
+import { number, z as zod } from "zod";
 import { GenericObject, validationError } from "remix-validated-form";
-import { and, eq, isNotNull } from "drizzle-orm";
+import { and, eq, isNotNull, isNull } from "drizzle-orm";
 import { AdamRMSTimeSeries } from "~/db/schema/AdamRMSTimeSeries";
 
 export const loader = async () =>
@@ -17,14 +17,18 @@ export const loader = async () =>
 
 const validator = withZod(
   zod.object({
+    nanoid: zod.string().min(21).max(21).optional(),
     rootUrl: zod.string().min(1),
     version: zod.string().max(50).min(3),
+    hidden: zod.boolean().optional(),
     devMode: zod.boolean(),
     userDefinedString: zod.string().optional(),
     metaData: zod.object({
       instances: zod.number().or(zod.boolean()).optional(),
       users: zod.number().or(zod.boolean()).optional(),
-      assets: zod.number().or(zod.boolean()).optional(),
+      assetsCount: zod.number().or(zod.boolean()).optional(),
+      assetsValueUSD: zod.number().or(zod.boolean()).optional(),
+      assetsMassKg: zod.number().or(zod.boolean()).optional(),
     }),
   })
 );
@@ -48,39 +52,61 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
     .from(AdamRMSInstallations)
     .where(
       and(
-        isNotNull(AdamRMSInstallations.rootUrl),
-        eq(AdamRMSInstallations.rootUrl, validated.data.rootUrl)
+        validated.data.nanoid
+          ? eq(AdamRMSInstallations.uuid, validated.data.nanoid)
+          : and(
+              eq(AdamRMSInstallations.rootUrl, validated.data.rootUrl),
+              isNull(AdamRMSInstallations.uuid)
+            ),
+        isNotNull(AdamRMSInstallations.rootUrl)
       )
     )
     .limit(1);
   let installationId: number;
+  const installationData = {
+    uuid: validated.data.nanoid || null,
+    rootUrl: validated.data.rootUrl,
+    latestHeardTimestamp: new Date(),
+    version: validated.data.version,
+    devMode: validated.data.devMode,
+    hidden: validated.data.hidden || false,
+    asn: cf.asOrganization + " (" + cf.asn + ")",
+    location:
+      cf.city +
+      ", " +
+      cf.region +
+      ", " +
+      cf.country +
+      ", " +
+      cf.continent +
+      " (via " +
+      cf.colo +
+      ")",
+    userDefinedString: validated.data.userDefinedString || "",
+    metaData: {
+      instances:
+        validated.data.metaData.instances !== true
+          ? Number(validated.data.metaData.instances)
+          : false,
+      users: Number.isInteger(validated.data.metaData.users)
+        ? Number(validated.data.metaData.users)
+        : false,
+      assetsCount: Number.isInteger(validated.data.metaData.assetsCount)
+        ? Number(validated.data.metaData.assetsCount)
+        : false,
+      assetsValueUSD: Number.isInteger(validated.data.metaData.assetsValueUSD)
+        ? validated.data.metaData.assetsValueUSD
+        : false,
+      assetsMassKg: Number.isInteger(validated.data.metaData.assetsMassKg)
+        ? validated.data.metaData.assetsMassKg
+        : false,
+    },
+  };
   if (findInstallation.length > 0) {
     installationId = findInstallation[0].id;
     const update = await db(env.DB)
       .update(AdamRMSInstallations)
-      .set({
-        latestHeardTimestamp: new Date(),
-        version: validated.data.version,
-        devMode: validated.data.devMode,
-        asn: cf.asOrganization + " (" + cf.asn + ")",
-        location:
-          cf.city +
-          ", " +
-          cf.region +
-          ", " +
-          cf.country +
-          ", " +
-          cf.continent +
-          " (via " +
-          cf.colo +
-          ")",
-        userDefinedString: validated.data.userDefinedString || "",
-        metaData: {
-          instances: validated.data.metaData.instances || false,
-          users: validated.data.metaData.users || false,
-          assets: validated.data.metaData.assets || false,
-        },
-      })
+      .set({ ...installationData })
       .where(eq(AdamRMSInstallations.id, installationId));
     if (update.error) return json({ message: update.error }, 500);
   } else {
@@ -88,28 +114,7 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
       .insert(AdamRMSInstallations)
       .values({
         firstHeardTimestamp: new Date(),
-        latestHeardTimestamp: new Date(),
-        rootUrl: validated.data.rootUrl,
-        version: validated.data.version,
-        devMode: validated.data.devMode,
-        asn: cf.asOrganization + " (" + cf.asn + ")",
-        location:
-          cf.city +
-          ", " +
-          cf.region +
-          ", " +
-          cf.country +
-          ", " +
-          cf.continent +
-          " (via " +
-          cf.colo +
-          ")",
-        userDefinedString: validated.data.userDefinedString || "",
-        metaData: {
-          instances: validated.data.metaData.instances || false,
-          users: validated.data.metaData.users || false,
-          assets: validated.data.metaData.assets || false,
-        },
+        ...installationData,
       })
       .returning({ insertedId: AdamRMSInstallations.id });
     if (insert.error) return json({ message: insert.error }, 500);
@@ -120,11 +125,14 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
     .insert(AdamRMSTimeSeries)
     .values({
       installationId: installationId,
+      timestamp: new Date(),
       version: validated.data.version,
       metaData: {
         instances: validated.data.metaData.instances || false,
         users: validated.data.metaData.users || false,
-        assets: validated.data.metaData.assets || false,
+        assetsCount: validated.data.metaData.assetsCount || false,
+        assetsValueUSD: validated.data.metaData.assetsValueUSD || false,
+        assetsMassKg: validated.data.metaData.assetsMassKg || false,
       },
     });
   if (insertTimeSeries.error)

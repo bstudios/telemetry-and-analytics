@@ -15,6 +15,7 @@ CREATE TABLE `adamrmsinstallations` (
 --> statement-breakpoint
 CREATE TABLE `adamrmstimeseries` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`timestamp` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	`installationId` integer,
 	`version` text NOT NULL,
 	`metadata` text DEFAULT [object Object]

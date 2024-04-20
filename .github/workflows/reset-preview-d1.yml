@@ -6,7 +6,7 @@ concurrency:
   cancel-in-progress: false
 
 name: Reset the preview database to base state
-run-name: Reset the preview database triggered by @${{ github.actor }}
+run-name: ${{ github.actor }} reset the preview database
 jobs:
   reset:
     runs-on: ubuntu-latest
