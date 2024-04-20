@@ -16,8 +16,9 @@
     "migrations:gen": "drizzle-kit generate:sqlite",
     "migrations:upgradeMetadata": "drizzle-kit up:sqlite",
     "migrations:check": "drizzle-kit check:sqlite",
-    "local:migrations:apply": "wrangler d1 migrations apply DB --local",
-    "local:d1:init": "npm run local:migrations:apply && wrangler d1 execute DB --file='./app/db/fixtures/demo.sql' --local",
+    "d1:local:migrations:apply": "wrangler d1 migrations apply DB --local",
+    "d1:local:init": "npm run d1:local:migrations:apply && wrangler d1 execute DB --file='./app/db/fixtures/demo.sql' --local",
+    "d1:local:reset": "wrangler d1 execute DB --preview --remote=true --file='./app/db/fixtures/reset.sql' && npm run d1:local:init",
     "typegen": "wrangler types"
   },
   "dependencies": {
