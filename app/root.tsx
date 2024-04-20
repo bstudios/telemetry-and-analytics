@@ -91,6 +91,7 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  console.log(error); // Send error to CF workers dashboard
   if (isRouteErrorResponse(error)) {
     return (
       <Container className={classes.root}>
@@ -113,7 +114,9 @@ export function ErrorBoundary() {
       <Container className={classes.root}>
         <Title className={classes.title}>{error.name}</Title>
         <Text c="dimmed" size="lg" ta="center" className={classes.description}>
-          {error.message}
+          {process.env.NODE_ENV !== "production"
+            ? error.message
+            : "An error occurred trying to load this page, please try again later."}
         </Text>
         <Group justify="center">
           <Link to="/">
