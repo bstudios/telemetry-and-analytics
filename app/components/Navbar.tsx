@@ -4,7 +4,7 @@ import { Link, NavLink } from "@remix-run/react";
 import studiosLogo from "./StudiosLogo.svg";
 
 const userLinks = [
-  { link: "/why-is-my-server-calling-this-url", label: "Privacy & Security" },
+  { link: "/privacy-and-security", label: "Privacy & Security" },
   { link: "https://bithell.studio", label: "Bithell Studios site" },
 ];
 

@@ -4,7 +4,7 @@ export const meta: MetaFunction = () => {
   return [
     {
       title:
-        "Why is my server calling this URL? | Bithell Studios Telemetry and Analytics Platform",
+        "Privacy and Security | Bithell Studios Telemetry and Analytics Platform",
     },
   ];
 };

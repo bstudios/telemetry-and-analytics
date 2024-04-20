@@ -13,7 +13,7 @@ import { and, eq, isNotNull, isNull } from "drizzle-orm";
 import { AdamRMSTimeSeries } from "~/db/schema/AdamRMSTimeSeries";
 
 export const loader = async () =>
-  redirect("/why-is-my-server-calling-this-url");
+  redirect("/privacy-and-security");
 
 const validator = withZod(
   zod.object({
