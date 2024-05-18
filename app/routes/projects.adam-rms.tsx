@@ -198,7 +198,7 @@ export default function Index() {
                 value: data.totals.users.toString(),
                 diff: null,
                 description:
-                  "Total number of users across all installations seen in the last 90 days",
+                  "Total number of users across participating installations seen in the last 90 days",
               },
               {
                 title: "Total Assets",
@@ -206,7 +206,7 @@ export default function Index() {
                 value: data.totals.assetsCount.toString(),
                 diff: null,
                 description:
-                  "Total number of assets across all installations seen in the last 90 days",
+                  "Total number of assets across participating installations seen in the last 90 days",
               },
               {
                 title: "Total Mass of Assets",
@@ -214,16 +214,16 @@ export default function Index() {
                 value: data.totals.assetsMassKg.toString(),
                 diff: null,
                 description:
-                  "Total mass of assets across all installations seen in the last 90 days, in Kilograms",
+                  "Total mass of assets across participating installations seen in the last 90 days, in Kilograms",
               },
-              {
+              /*{
                 title: "Total Assets",
                 icon: "coin",
                 value: data.totals.assetsValueUSD.toString(),
                 diff: null,
                 description:
-                  "Total value of all assets across all installations seen in the last 90 days, in USD",
-              },
+                  "Total value of all assets across participating installations seen in the last 90 days, in USD",
+              },*/
             ]}
           />
           <Card padding="lg" radius="md" withBorder>

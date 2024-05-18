@@ -65,7 +65,7 @@ export function StatsGrid({
     );
   });
   return (
-    <SimpleGrid pt={"md"} pb={"md"} cols={{ base: 1, xs: 2, md: 4 }}>
+    <SimpleGrid pt={"md"} pb={"md"} cols={{ base: 1, xs: 2, md: 3 }}>
       {stats}
     </SimpleGrid>
   );
