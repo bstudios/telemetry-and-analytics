@@ -24,7 +24,7 @@ export const apiData = [
   {
     key: "rootUrl",
     description:
-      "The root URL of the AdamRMS installation as configured on the server (this is not validated against the referrer). This is used to identify the installation.",
+      "The root URL of the AdamRMS installation as configured on the server (this is not validated against the referrer). This is used to identify the installation, and is displayed in the table of installations if this option is selected in the server config.",
     modes: ["Limited", "Standard"],
   },
   {
@@ -42,13 +42,13 @@ export const apiData = [
   {
     key: "userDefinedString",
     description:
-      "A user-defined string that can be used to identify the installation, if configured on the server. This is optional, and defaults to a blank string.",
+      "A user-defined string that can be used to identify the installation in the table of installations, if configured on the server. This is optional, and defaults to a blank string.",
     modes: ["Limited", "Standard"],
   },
   {
     key: "instances",
     description: "The number of businesses setup on the AdamRMS installation.",
-    modes: ["Standard"],
+    modes: ["Limited", "Standard"],
   },
   {
     key: "users",
