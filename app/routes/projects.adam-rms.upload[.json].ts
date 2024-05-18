@@ -12,8 +12,67 @@ import { GenericObject, validationError } from "remix-validated-form";
 import { and, eq, isNotNull, isNull } from "drizzle-orm";
 import { AdamRMSTimeSeries } from "~/db/schema/AdamRMSTimeSeries";
 
-export const loader = async () =>
-  redirect("/privacy-and-security");
+export const loader = async () => redirect("/privacy-and-security");
+
+export const apiData = [
+  {
+    key: "nanoid",
+    description:
+      "Unique identifier for the installation. This is a 21 character long random string, first generated when a new AdamRMS installation is installed.",
+    modes: ["Limited", "Standard"],
+  },
+  {
+    key: "rootUrl",
+    description:
+      "The root URL of the AdamRMS installation as configured on the server (this is not validated against the referrer). This is used to identify the installation.",
+    modes: ["Limited", "Standard"],
+  },
+  {
+    key: "version",
+    description:
+      "The version of the AdamRMS installation installed on the server. This is not validated.",
+    modes: ["Limited", "Standard"],
+  },
+  {
+    key: "devMode",
+    description:
+      "Whether the installation is in development mode, as configured on the server using an environment variable. Installations in development mode are not counted in statistics.",
+    modes: ["Limited", "Standard"],
+  },
+  {
+    key: "userDefinedString",
+    description:
+      "A user-defined string that can be used to identify the installation, if configured on the server. This is optional, and defaults to a blank string.",
+    modes: ["Limited", "Standard"],
+  },
+  {
+    key: "instances",
+    description: "The number of businesses setup on the AdamRMS installation.",
+    modes: ["Standard"],
+  },
+  {
+    key: "users",
+    description: "The number of users in the AdamRMS installation.",
+    modes: ["Standard"],
+  },
+  {
+    key: "assetsCount",
+    description: "The number of assets in the AdamRMS installation.",
+    modes: ["Standard"],
+  },
+  {
+    key: "assetsValueUSD",
+    description:
+      "The total value of the assets in the AdamRMS installation in USD.",
+    modes: ["Standard"],
+  },
+  {
+    key: "assetsMassKg",
+    description:
+      "The total mass of the assets in the AdamRMS installation in kilograms.",
+    modes: ["Standard"],
+  },
+];
 
 const validator = withZod(
   zod.object({

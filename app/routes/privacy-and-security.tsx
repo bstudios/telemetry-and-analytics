@@ -7,6 +7,7 @@ import {
   Container,
   Group,
   List,
+  Table,
   Text,
   Title,
 } from "@mantine/core";
@@ -14,6 +15,7 @@ import { type MetaFunction } from "@remix-run/cloudflare";
 import { Link } from "@remix-run/react";
 import { IconBrandGithub } from "@tabler/icons-react";
 import AdamRMSLogoIcon from "~/components/AdamRMS/logoicon.svg";
+import { apiData } from "./projects.adam-rms.upload[.json]";
 export const meta: MetaFunction = () => {
   return [
     {
@@ -72,13 +74,49 @@ export default function Index() {
           </Accordion.Control>
           <Accordion.Panel>
             <Text size="sm">
-              As of version{" "}
+              Sending telemetry data is not supported (disabled) before version{" "}
               <Link to="https://github.com/adam-rms/adam-rms/releases/tag/v1.200.0">
                 <Code>v1.200</Code>
               </Link>{" "}
-              sending telemetry data is not optional, but users can opt-out of
-              enhanced telemetry collection.
+              of AdamRMS. For <Code>v1.200</Code> and above, the following data
+              is collected. Server administrators can select between{" "}
+              <Code>Limited</Code> and <Code>Standard</Code> telemetry modes
+              during setup.
             </Text>
+            <Table>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Name</Table.Th>
+                  <Table.Th>Description</Table.Th>
+                  <Table.Th>Collected in Limited?</Table.Th>
+                  <Table.Th>Collected in Standard?</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>
+                {apiData.map((element) => (
+                  <Table.Tr key={element.key}>
+                    <Table.Td>
+                      <Code>{element.key}</Code>
+                    </Table.Td>
+                    <Table.Td>{element.description}</Table.Td>
+                    <Table.Td>
+                      {element.modes.includes("Limited") ? (
+                        <Badge color="green">Yes</Badge>
+                      ) : (
+                        <Badge color="red">No</Badge>
+                      )}
+                    </Table.Td>
+                    <Table.Td>
+                      {element.modes.includes("Standard") ? (
+                        <Badge color="green">Yes</Badge>
+                      ) : (
+                        <Badge color="red">No</Badge>
+                      )}
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
