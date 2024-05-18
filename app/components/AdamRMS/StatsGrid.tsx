@@ -65,8 +65,8 @@ export function StatsGrid({
     );
   });
   return (
-    <div className={classes.root}>
-      <SimpleGrid cols={{ base: 1, xs: 2, md: 4 }}>{stats}</SimpleGrid>
-    </div>
+    <SimpleGrid pt={"md"} pb={"md"} cols={{ base: 1, xs: 2, md: 4 }}>
+      {stats}
+    </SimpleGrid>
   );
 }

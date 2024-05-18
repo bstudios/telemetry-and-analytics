@@ -1,73 +1,34 @@
 import {
-  ActionFunctionArgs,
   json,
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/cloudflare";
-import { BarChart } from "@mantine/charts";
 import { db } from "../d1client.server";
 import { AdamRMSInstallations } from "../db/schema/AdamRMSInstallations";
 import { Link, useLoaderData } from "@remix-run/react";
+import { and, eq, gte, isNotNull, lt, max } from "drizzle-orm";
 import {
-  and,
-  desc,
-  eq,
-  gt,
-  gte,
-  inArray,
-  isNotNull,
-  lt,
-  ne,
-  max,
-} from "drizzle-orm";
-import { Center, Image, Table, Text } from "@mantine/core";
+  Button,
+  Card,
+  Container,
+  Group,
+  Image,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
 import { StatsGrid } from "~/components/AdamRMS/StatsGrid";
 import AdamRMSLogo from "~/components/AdamRMS/logo.svg";
 import { AdamRMSTimeSeries } from "~/db/schema/AdamRMSTimeSeries";
-import { version } from "react";
-import { number } from "zod";
+import { IconArrowUpRight, IconLock } from "@tabler/icons-react";
+import {
+  InstallationsBarChart,
+  getMonthName,
+  getNextMonth,
+  getPreviousMonths,
+} from "~/components/AdamRMS/InstallationsBarChart";
 export const meta: MetaFunction = () => {
   return [{ title: "AdamRMS Project | Telemetry and Analytics" }];
-};
-const months: { [key: number]: string } = {
-  0: "January",
-  1: "February",
-  2: "March",
-  3: "April",
-  4: "May",
-  5: "June",
-  6: "July",
-  7: "August",
-  8: "September",
-  9: "October",
-  10: "November",
-  11: "December",
-};
-const getNextMonth = (month: number, year: number) => {
-  if (month === 11) return { month: 0, year: year + 1 };
-  else return { month: month + 1, year };
-};
-const getMonthName = (month: number) => {
-  return months[month];
-};
-const getPreviousMonths = (lookbackMonths: number) => {
-  const d = new Date();
-  const month = d.getMonth();
-  const year = d.getFullYear();
-  const monthsYears: Array<{
-    month: number;
-    year: number;
-  }> = [
-    {
-      month,
-      year,
-    },
-  ];
-  for (let i = 0; i < lookbackMonths; i++) {
-    d.setMonth(d.getMonth() - 1);
-    monthsYears.push({ month: d.getMonth(), year: d.getFullYear() });
-  }
-  return monthsYears;
 };
 const getInstallationStatsInMonth = async (
   env: Env,
@@ -179,51 +140,43 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>();
-  const graphColors = [
-    "red.6",
-    "gray.6",
-    "pink.6",
-    "grape.6",
-    "violet.6",
-    "indigo.6",
-    "blue.6",
-    "cyan.6",
-    "teal.6",
-    "green.6",
-    "lime.6",
-    "yellow.6",
-    "orange",
-    "red.2",
-    "gray.2",
-    "pink.2",
-    "grape.2",
-    "violet.2",
-    "indigo.2",
-    "blue.2",
-    "cyan.2",
-    "teal.2",
-    "green.2",
-    "lime.2",
-    "yellow.2",
-    "orange.2",
-  ].reverse();
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <Center>
-        <Image
-          h={200}
-          w="auto"
-          fit="contain"
-          src={AdamRMSLogo}
-          alt="AdamRMS Logo"
-        />
-      </Center>
+    <Container mt={"xl"}>
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Card.Section>
+          <Image w="fill" fit="contain" src={AdamRMSLogo} alt="AdamRMS Logo" />
+        </Card.Section>
+
+        <Group justify="space-between" mt="md" mb="xs">
+          <Text fw={500}>AdamRMS</Text>
+          <Link to="/privacy-and-security">
+            <Button variant="light" rightSection={<IconLock size={14} />}>
+              Privacy
+            </Button>
+          </Link>
+        </Group>
+
+        <Text size="sm" c="dimmed">
+          AdamRMS is a free, open source advanced Rental Management System for
+          Theatre, AV & Broadcast
+        </Text>
+
+        <Button
+          fullWidth
+          radius="md"
+          mt="md"
+          rightSection={<IconArrowUpRight size={14} />}
+        >
+          Website
+        </Button>
+      </Card>
+
       {data.installationsSeenLast90DaysCount > 0 ? (
-        <div>
+        <>
           <StatsGrid
             data={[
               {
-                title: "Active Installations",
+                title: "Installations",
                 icon: "receipt",
                 value: data.installationsSeenLast90DaysCount.toString(),
                 diff: null,
@@ -271,56 +224,54 @@ export default function Index() {
               },
             ]}
           />
-
-          <BarChart
-            h={300}
-            data={[
-              ...data.historicInstallationStats.map((month) => ({
-                month: `${month.monthName} ${month.year}`,
-                ...month.installation,
-              })),
-            ].reverse()}
-            dataKey="month"
-            type="stacked"
-            series={data.historicInstallationStats
-              .flatMap((month) =>
-                Object.keys(month.installation).map((key) => ({
-                  name: key,
-                  color: graphColors.pop() || "pink.9",
-                }))
-              )
-              .filter((v, i, a) => a.findIndex((t) => t.name === v.name) === i)}
-            xAxisLabel="Month"
-            yAxisLabel="Active Installations"
-          />
-          <Table>
-            <Table.Thead>
-              <Table.Th>URL</Table.Th>
-              <Table.Th>Note</Table.Th>
-            </Table.Thead>
-            <Table.Tbody>
-              {data.installationsTable.map((installation, i) => (
-                <Table.Tr key={i}>
-                  <Table.Td>
-                    <Link
-                      to={installation.rootUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {installation.rootUrl}
-                    </Link>
-                  </Table.Td>
-                  <Table.Td>{installation.userDefinedString}</Table.Td>
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
-        </div>
+          <Card padding="lg" radius="md" withBorder>
+            <Title
+              order={4}
+              fw={500}
+              mb="md"
+              style={{ textTransform: "uppercase" }}
+            >
+              Versions Installed
+            </Title>
+            <InstallationsBarChart data={data.historicInstallationStats} />
+          </Card>
+          <Card padding="lg" radius="md" withBorder mt={"md"}>
+            <Title order={4} mb="md" style={{ textTransform: "uppercase" }}>
+              Installations
+            </Title>
+            <Text mb="md" c="dimmed">
+              Businesses who have opted-in to sharing their installation on the
+              platform. All other installation statistics are anonymised.
+            </Text>
+            <Table>
+              <Table.Thead>
+                <Table.Th>URL</Table.Th>
+                <Table.Th>Note</Table.Th>
+              </Table.Thead>
+              <Table.Tbody>
+                {data.installationsTable.map((installation, i) => (
+                  <Table.Tr key={i}>
+                    <Table.Td>
+                      <Link
+                        to={installation.rootUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {installation.rootUrl}
+                      </Link>
+                    </Table.Td>
+                    <Table.Td>{installation.userDefinedString}</Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Card>
+        </>
       ) : (
         <div>
           <h1>No installations found</h1>
         </div>
       )}
-    </div>
+    </Container>
   );
 }

@@ -1,49 +1,65 @@
-import { Link, useLoaderData } from "@remix-run/react";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
-import { json } from "@remix-run/cloudflare";
+import {
+  Button,
+  Card,
+  Container,
+  Group,
+  Image,
+  List,
+  SimpleGrid,
+  Text,
+  Title,
+} from "@mantine/core";
+import type { MetaFunction } from "@remix-run/cloudflare";
+import AdamRMSLogo from "~/components/AdamRMS/logo.svg";
+import { Link } from "@remix-run/react";
+import { IconArrowRight } from "@tabler/icons-react";
 export const meta: MetaFunction = () => {
   return [{ title: "Bithell Studios Telemetry and Analytics Platform" }];
 };
 
-export const loader = async ({ context }: LoaderFunctionArgs) => {
-  const { cf } = context.cloudflare;
-  return json({
-    visitorString:
-      cf.asOrganization +
-      " in " +
-      cf.city +
-      ", " +
-      cf.region +
-      ", " +
-      cf.country +
-      ", " +
-      cf.continent +
-      " via " +
-      cf.colo,
-  });
-};
-
 export default function Index() {
-  const data = useLoaderData<typeof loader>();
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Bithell Studios Telemetry and Analytics Platform</h1>
-      <p>
-        This is a platform for telemetry and analytics for Bithell Studios
-        projects.
-      </p>
-      <p>
-        Text about how this works, and the privacy etc etc goes here.
-        Principles:
-      </p>
-      <ul>
-        <li>
-          Data not verified, presented as-is - anyone can make a request and
-          it'll show up here and skew the stats
-        </li>
-        <li>Don't store any personal data</li>
-        <li>Project is open source</li>
-      </ul>
-    </div>
+    <Container mt={"lg"}>
+      <Title order={1} mb={"md"}>
+        Bithell Studios Telemetry and Analytics
+      </Title>
+      <Text mb={"md"}>
+        This open-source platform collects telemetry data from open-source
+        applications, such as AdamRMS. It also allows you to track your own
+        open-source projects, by sending telemetry data to this platform.
+      </Text>
+      <SimpleGrid cols={{ base: 1, xs: 2 }} spacing={50} mt={30}>
+        <Card withBorder padding="lg">
+          <Card.Section>
+            <Image
+              w="fill"
+              fit="contain"
+              src={AdamRMSLogo}
+              alt="AdamRMS Logo"
+            />
+          </Card.Section>
+
+          <Group justify="space-between" mt="xl">
+            <Text fz="sm" fw={700}>
+              AdamRMS
+            </Text>
+            <Group gap={5}>
+              <Link to="/projects/adam-rms">
+                <Button
+                  variant="light"
+                  rightSection={<IconArrowRight size={14} />}
+                >
+                  View project
+                </Button>
+              </Link>
+            </Group>
+          </Group>
+          <Text mt="sm" mb="md" c="dimmed" fz="xs">
+            AdamRMS is a free, open source advanced Rental Management System for
+            Theatre, AV & Broadcast
+          </Text>
+        </Card>
+      </SimpleGrid>
+    </Container>
   );
 }
