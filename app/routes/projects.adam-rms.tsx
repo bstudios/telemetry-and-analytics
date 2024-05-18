@@ -161,14 +161,16 @@ export default function Index() {
           Theatre, AV & Broadcast
         </Text>
 
-        <Button
-          fullWidth
-          radius="md"
-          mt="md"
-          rightSection={<IconArrowUpRight size={14} />}
-        >
-          Website
-        </Button>
+        <Link to="https://adam-rms.com">
+          <Button
+            fullWidth
+            radius="md"
+            mt="md"
+            rightSection={<IconArrowUpRight size={14} />}
+          >
+            Website
+          </Button>
+        </Link>
       </Card>
 
       {data.installationsSeenLast90DaysCount > 0 ? (
