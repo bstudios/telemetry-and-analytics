@@ -185,12 +185,12 @@ export default function Index() {
                 description: "Installations seen in the last 90 days",
               },
               {
-                title: "Total Instances",
+                title: "Total Business Instances",
                 icon: "coin",
                 value: data.totals.instances.toString(),
                 diff: null,
                 description:
-                  "Total number instances across all installations seen in the last 90 days",
+                  "Total number businesses (instances) created across all installations seen in the last 90 days",
               },
               {
                 title: "Total Users",

@@ -3,17 +3,13 @@
 This project allows us to collect telemetry andd display analytics from our open-source applications, in order to better understand how our users are using our software and its reach and impact.
 
 The project runs under the following privacy principles:
-## Typegen
 
 - Like the applications themselves, this application is fully open-source and the code is available for anyone to inspect and audit.
 - We do not collect any personally identifiable information about users of our projects.
 - Those self-hosting projects can opt-out of telemetry collection at any time.
-Generate types for your Cloudflare bindings in `wrangler.toml`:
+
 
 ## This project
-```sh
-npm run typegen
-```
 
 This is a [Remix](https://remix.run) project, which is a framework for building server-rendered React applications. It runs on [Cloudflare Workers](https://workers.cloudflare.com/) with their D1 database, which allows us to run the application on the edge with minimal latency - essential for telemetry collection.
 You will need to rerun typegen whenever you make changes to `wrangler.toml`.
@@ -43,3 +39,11 @@ First, build your app for production:
 1. Create a new project on Cloudflare Pages
 1. Make sure to disable fallback mode (open) in the Cloudflare Pages settings
 1. Mount the D1 database in the project as "DB"
+
+
+## Typegen
+Generate types for your Cloudflare bindings in `wrangler.toml`:
+
+```sh
+npm run typegen
+```
