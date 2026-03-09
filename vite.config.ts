@@ -10,9 +10,7 @@ export default defineConfig({
     remixCloudflareDevProxy({
       configPath: "./wrangler.jsonc",
     }),
-    remix({
-      server: "./worker.ts",
-    }),
+    remix(),
     tsconfigPaths(),
   ],
 });
