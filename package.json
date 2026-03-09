@@ -6,7 +6,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build",
+    "build": "remix vite:build && esbuild worker.ts --bundle --format=esm --outfile=build/worker/index.js --platform=browser --conditions=workerd,worker,import --main-fields=module,main",
     "deploy": "npm run build && wrangler deploy",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
@@ -33,6 +33,7 @@
     "@mantine/nprogress": "^7.8.0",
     "@remix-run/cloudflare": "^2.15.2",
     "@remix-run/react": "^2.15.2",
+    "@remix-run/server-runtime": "^2.15.2",
     "@remix-validated-form/with-zod": "^2.0.7",
     "@tabler/icons-react": "^3.2.0",
     "dayjs": "^1.11.10",
@@ -54,6 +55,7 @@
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
+    "esbuild": "^0.21.0",
     "drizzle-kit": "^0.20.17",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^9.0.0",
@@ -69,7 +71,7 @@
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vite-tsconfig-paths": "^4.3.2",
-    "wrangler": "^3.99.0"
+    "wrangler": "^4.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
