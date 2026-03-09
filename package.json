@@ -6,7 +6,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build && esbuild worker.ts --bundle --format=esm --outfile=build/worker/index.js --platform=neutral --conditions=workerd,worker,import --external:__STATIC_CONTENT_MANIFEST",
+    "build": "remix vite:build && esbuild worker.ts --bundle --format=esm --outfile=build/worker/index.js --platform=browser --conditions=workerd,worker,import --main-fields=module,main",
     "deploy": "npm run build && wrangler deploy",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
