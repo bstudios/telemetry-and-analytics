@@ -1,13 +1,9 @@
 import { type PlatformProxy } from "wrangler";
 
-// When using `wrangler.toml` to configure bindings,
+// When using `wrangler.jsonc` to configure bindings,
 // `wrangler types` will generate types for those bindings
 // into the global `Env` interface.
-// Need this empty interface so that typechecking passes
-// even if no `wrangler.toml` exists.
-// I removed this because it stops VSCode seeing the worker-configuration.d.ts
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// interface Env {}
+// See worker-configuration.d.ts for the generated types.
 
 type Cloudflare = Omit<PlatformProxy<Env>, "dispose">;
 

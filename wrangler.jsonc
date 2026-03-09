@@ -2,7 +2,7 @@
   // After editing this file run npm run typegen to regenerate the types
   "name": "bithellstudios-telemetry-and-analytics",
   "compatibility_date": "2024-11-18",
-  "main": "./build/server/index.js",
+  "main": "./worker.ts",
   "assets": {
     "directory": "./build/client"
   },
