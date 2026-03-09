@@ -3,32 +3,31 @@ on:
     branches:
       - main
 
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-name: Deploy production to Cloudflare Pages & Migrate DB
+name: Deploy production to Cloudflare Workers & Migrate DB
 jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: npm
       - run: npm install
       - name: Build
         run: npm run build
-      - name: Deploy to Cloudflare
+      - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: "3.51.0"
           packageManager: npm
-          command: pages deploy ./build/client --project-name=bithellstudios-telemetry-and-analytics --commit-dirty=true
+          command: deploy
           postCommands: |
             echo "*** Running D1 Migrations ***"
             wrangler d1 migrations apply DB --remote
