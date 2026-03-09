@@ -9,34 +9,34 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-name: Push Preview to Cloudflare Pages
+name: Push Preview to Cloudflare Workers
 jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: npm
       - run: npm install
       - name: Build
         run: npm run build
-      - name: Deploy to Cloudflare
+      - name: Deploy preview to Cloudflare Workers
         id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageManager: npm
-          command: pages deploy ./build/client --project-name=bithellstudios-telemetry-and-analytics --commit-dirty=true
-      - uses: actions/github-script@v6
+          command: versions upload
+      - uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Built preview on Cloudflare Pages: ${{ steps.deploy.outputs.deployment-url }} [Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). [Run Migrations](https://github.com/bstudios/telemetry-and-analytics/actions/workflows/migrate-preview-d1.yml) or [Reset Preview DB](https://github.com/bstudios/telemetry-and-analytics/actions/workflows/reset-preview-d1.yml)'
+              body: 'Built preview on Cloudflare Workers: ${{ steps.deploy.outputs.deployment-url }} [Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). [Run Migrations](https://github.com/bstudios/telemetry-and-analytics/actions/workflows/migrate-preview-d1.yml) or [Reset Preview DB](https://github.com/bstudios/telemetry-and-analytics/actions/workflows/reset-preview-d1.yml)'
             })

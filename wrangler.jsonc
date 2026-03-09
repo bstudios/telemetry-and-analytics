@@ -1,0 +1,49 @@
+{
+  // After editing this file run npm run typegen to regenerate the types
+  "name": "bithellstudios-telemetry-and-analytics",
+  "compatibility_date": "2024-11-18",
+  "main": "./build/server/index.js",
+  "assets": {
+    "directory": "./build/client"
+  },
+  "send_metrics": true,
+
+  // D1 Database bindings
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "67e79b07-81ca-4e5c-ab60-323e45555e11",
+      "preview_database_id": "572b82f0-c3c2-4f55-aa10-39d902a3959f",
+      "database_name": "bithellstudios-telemetry-analytics-prod",
+      "migrations_table": "migrations",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "env": {
+    // Applies to both the local and the preview environments (but not production) - ie PR previews etc.
+    "preview": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "572b82f0-c3c2-4f55-aa10-39d902a3959f",
+          "database_name": "bithellstudios-telemetry-analytics-preview",
+          "migrations_table": "migrations",
+          "migrations_dir": "migrations"
+        }
+      ]
+    },
+    // Apply only to the production environment
+    "production": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "67e79b07-81ca-4e5c-ab60-323e45555e11",
+          "database_name": "bithellstudios-telemetry-analytics-prod",
+          "migrations_table": "migrations",
+          "migrations_dir": "migrations"
+        }
+      ]
+    }
+  }
+}
